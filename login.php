@@ -27,6 +27,7 @@
 
             <form id="registerForm">
                 <h2>Crea una cuenta</h2>
+                <input type="email" name="email" placeholder="Email"><br><br>
                 <input type="text" name="user" placeholder="Usuario"><br><br>
                 <input type="password" name="password" placeholder="Contraseña"><br><br>
                 <input type="password" name="confirmPass" placeholder="Repite Contraseña"><br><br>
