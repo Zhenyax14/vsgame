@@ -3,17 +3,21 @@ include 'Database.php';
 
 class User extends Database{
     // método para crear usuario
-    public function create($nickname, $email) {
+    public function create($nickname, $email, $password) {
+        // contraseña "hasheada"
+        $hash = password_hash($password, PASSWORD_DEFAULT);
         // consulta sql para insertar
-        $sql = "INSERT INTO usuarios (nickname, email)
-        VALUES (:nickname, :email)";
+        $sql = "INSERT INTO usuarios (nickname, email, password)
+        VALUES (:nickname, :email, :password)";
         // preparamos la consulta y vinculamos parámetros
         $stmt = $this->conex->prepare($sql);
         $stmt->bindValue(':nickname', $nickname);
         $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':password', $hash);
         // ejecutamos y devolvemos resultado
         return $stmt->execute();
     }
+
     // método para llamar usuario por su email
     public function getByEmail($email) {
         // consulta para filtrar usuario por email
@@ -25,6 +29,7 @@ class User extends Database{
         // devolvemos la fila como un array asociativo
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     // método para actualizar score en bd
     public function updateScore($id, $newScore) {
         $sql = "UPDATE usuarios SET score = :score WHERE id = :id";
@@ -33,6 +38,7 @@ class User extends Database{
         $stmt->bindValue(':id', $id);
         return $stmt->execute();
     }
+    
     // método para obtener el ranking
     public function getRanking() {
         $sql = "SELECT nickname, score FROM usuarios ORDER BY score DESC";
