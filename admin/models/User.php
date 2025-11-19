@@ -38,7 +38,7 @@ class User extends Database{
         $stmt->bindValue(':id', $id);
         return $stmt->execute();
     }
-    
+
     // método para obtener el ranking
     public function getRanking() {
         $sql = "SELECT nickname, score FROM usuarios ORDER BY score DESC";
