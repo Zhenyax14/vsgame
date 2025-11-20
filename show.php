@@ -29,15 +29,15 @@
       <a href="#" id="atacar" onclick="atacar(); return false"> <!-- FALTA ENLACE Y CAMBIAR ONCLICK POR EVENTOS-->
         <img src="assets/images/atacar.png" alt="Carta del Jugador" class="btn" >
       </a>
-      <a href="#" id="defensa"  onclick="defender(); return false">
+      <a href="#" id="defender"  onclick="defender(); return false">
         <img src="assets/images/defender.png" alt="Carta del Jugador" class="btn" >
       </a>
     </div>
     
 </div>
-  <a href="/daw/poo/videogame.php"> <!-- CAMBIAR ENLACE POR BOTON, LOGICA EN JS-->
+  <button id='restartBtn'>
       <img src="assets/images/restartgame.png" alt="reiniciar" id="restartGame">
-  </a>
+  </button>
 <div class="score">
     <div class="contentScore">
     <div id="bandera" class="show">
@@ -50,10 +50,10 @@
       <div class="ronda">
         1
       </div>
-      <div class="puntuacionJ1">
+      <div class="puntuacionJugador">
         2
       </div>
-      <div class="puntuacionJ2">
+      <div class="puntuacionCpu">
          3
       </div>
     </div>

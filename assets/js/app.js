@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showRegister = document.getElementById("showRegister");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
+
     //Cambiar entre formularios
     showRegister.addEventListener("click", (e) => {
         e.preventDefault();
@@ -93,5 +94,44 @@ document.addEventListener("DOMContentLoaded", () => {
         } else { 
             alert(result.message); }
     });
+
+    //LÓGICA DEL JUEGO
+
+    const opcionJugada = document.getElementById('opcionJugada');
+    const atacar = document.getElementById('atacar');
+    const defender = document.getElementById('defender');
+    const playerCard = document.getElementById('playerCard');
+    const machineCard = document.getElementById('machineCard');
+    const ronda = document.getElementById('ronda');
+    const puntuacionJugador = document.getElementById('puntuacionJugador');
+    const puntuacionCpu = document.getElementById('puntuacionCpu');
+    const restartBtn = document.getElementById('restartBtn');
+    const popup = document.getElementById('popup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+
+    const gameState = {
+        ronda: 1,
+        maxRondas: 5,
+        scoreJugador: 0,
+        scoreCpu: 0,
+        playerCard: null,
+        machineCard: null,
+        mazo: [],
+        historial: []
+    };
+
+    async function cargarMazo() {
+        const response = await fetch("/api/start_game.php");
+        const data = await response.json();
+        gameState.mazo = data.mazo;
+        elegirCartas();
+    }
+
+    function elegirCartas() {
+        const indiceJugador = Math.floor(Math.random() * gameState.mazo.length);
+        const indiceCpu = Math.floor(Math.random() * gameState.mazo.length);
+        gameState.playerCard = gameState.mazo[indiceJugador];
+        gameState.machineCard = gameState.mazo[indiceCpu];
+    }
 
 });
