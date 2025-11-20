@@ -1,8 +1,10 @@
 <?php
-include 'models/User.php';
+//include '../models/User.php';
+include './admin/models/User.php';
 
 class UserController
 {
+
     // método registrar
     public function register()
     {
@@ -10,6 +12,14 @@ class UserController
         $nickname = $_POST['nickname'] ?? null;
         $email = $_POST['email'] ?? null;
         $password = $_POST['password'] ?? null;
+
+        // comprobar que el envio es correcto
+        // echo json_encode([
+        //         "success" => true,
+        //         "message" => $nickname.' '.$email
+        //     ]);
+
+        //     return;
 
         // validación entrada
         if (!$nickname || !$email || !$password) {
