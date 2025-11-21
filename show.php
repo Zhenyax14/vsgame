@@ -63,9 +63,8 @@
         <div class="popup-content">
             <button class="close-btn" id="closePopupBtn">&times;</button>
             <h2>Jugada</h2>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, provident.
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, provident.</p>
         </div>
     </div>
-
 </body>
 </html>
