@@ -1,146 +1,152 @@
 <?php
-//include '../models/User.php';
-include './admin/models/User.php';
+include __DIR__ . '/../models/User.php';
+//include './admin/models/User.php';
 
 class UserController
 {
 
-    // método registrar
+    // método para registrar
     public function register()
     {
-        // se reciben datos del FE
-        $nickname = $_POST['nickname'] ?? null;
-        $email = $_POST['email'] ?? null;
-        $password = $_POST['password'] ?? null;
+        $model = new User();
 
-        // comprobar que el envio es correcto
-        // echo json_encode([
-        //         "success" => true,
-        //         "message" => $nickname.' '.$email
-        //     ]);
+        // si se envía por POST
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        //     return;
-
-        // validación entrada
-        if (!$nickname || !$email || !$password) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Todos los campos son obligatorios."
-            ]);
-
-            return;
+            $nickname = $_POST['nickname'] ?? null;
+            $email    = $_POST['email'] ?? null;
+            $password = $_POST['password'] ?? null;
+            $admin    = isset($_POST['admin']) ? 1 : 0;
+            // Validación campos
+            if (!$nickname || !$email || !$password) {
+                $mensaje = "Todos los campos son obligatorios.";
+            }
+            // Validación email duplicado
+            elseif ($model->getByEmail($email)) {
+                $mensaje = "Ya existe un usuario con ese email.";
+            } else {
+                // Crear usuario
+                $model->create($nickname, $email, $password, $admin);
+                header("Location: admin/login.php");
+                exit;
+            }
         }
-        // instanciamos usuario
-        $user = new User();
-
-        // validación email único
-        if ($user->getByEmail($email)) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Email ya registrado."
-            ]);
-            return;
-        }
-
-        // usamos método del modelo User para crear usuario nuevo
-        $result = $user->create($nickname, $email, $password);
-
-        // respuesta al FE
-        echo json_encode([
-            "success" => $result,
-            "message" => $result ? "Usuario creado con éxito" : "Error al crear usuario"
-        ]);
+        // si se manda por GET, se manda a formulario
+        $view = 'admin/views/users/create.php';
+        include 'admin/header.php';
+        include $view;
     }
 
     // método para permitir logearse
     public function login()
     {
-        // se reciben datos del FE
+        session_start();
+        
+
         $email = $_POST['email'] ?? null;
         $password = $_POST['password'] ?? null;
 
-        // validación campos
-        if (!$email || !$password) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Todos los campos son obligatorios."
-            ]);
-            return;
+
+        $model = new User();
+        $user = $model->getByEmail($email);
+
+        if (!$user || !password_verify($password, $user['password'])) {
+            $_SESSION['login_error'] = "Usuario o contraseña incorrectos.";
+            header("Location: admin/login.php");
+            exit;
         }
-        // instancia modelo
-        $user = new User();
-        // buscamos usuario por email y guardamos sus datos
-        $datosUser = $user->getByEmail($email);
-        // validación 
-        if (!$datosUser) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Email no registrado."
-            ]);
-            return;
+
+        if (!$user['admin']) {
+            $_SESSION['login_error'] = "No tienes permisos para acceder al panel.";
+            header("Location: admin/login.php");
+            exit;
         }
-        // validación contraseña
-        if (!password_verify($password, $datosUser['password'])) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Contraseña incorrecta."
-            ]);
-            return;
-        }
-        // iniciar sesión y guardar datos usuario
-        session_start();
-        $_SESSION['user'] = [
-            "id" => $datosUser['id'],
-            "nickname" => $datosUser['nickname'],
-            "email" => $datosUser['email']
-        ];
         
-        // respuesta al FE
-        echo json_encode([
-            "success" => true,
-            "message" => "Login correcto",
-            "user" => [
-                "id" => $datosUser['id'],
-                "nickname" => $datosUser['nickname'],
-                "email" => $datosUser['email']
-            ]
-        ]);
+        $_SESSION['admin'] = [
+            "id"       => $user['id'],
+            "email"    => $user['email'],
+            "nickname" => $user['nickname']
+        ];
+
+        header("Location: index.php");
+        exit;
     }
+
     // método para cerrar sesión
     public function logout()
     {
         session_start();
         // eliminar datos del usuario
-        unset($_SESSION['user']);
-        // destruir la sesión
-        session_destroy();
-        // respuesta al FE
-        echo json_encode([
-            "success" => true,
-            "message" => "Sesión cerrada correctamente."
-        ]);
+         $_SESSION = [];
+
+    // Regenerar ID para evitar sesiones corruptas
+    session_regenerate_id(true);
+        header("Location: admin/login.php");
+        exit;
+    }
+    // método para listar que lleva a list.php
+    public function list()
+    {
+        $model = new User();
+        $users = $model->getAll();
+
+        $view = 'admin/views/users/list.php';
+        include 'admin/header.php';
+        include $view;
     }
 
     // método para obtener usuario
     public function getCurrentUser()
     {
         session_start();
-
-        echo json_encode([
-            "success" => true,
-            "user" => $_SESSION['user']
-        ]);
+        return $_SESSION['admin'] ?? null;
     }
 
-    // método obtener ranking
-    public function getRanking() {
-        // instancia usuario
-        $user = new User();
-        $ranking = $user->getRanking();
+    public function edit()
+    {
+        $id = $_GET['id'] ?? null;
 
-        echo json_encode([
-            "success"=>true,
-            "ranking"=>"ranking"
-        ]);
+        if (!$id) {
+            echo "Error: ID no válido.";
+            exit;
+        }
+
+        $model = new User();
+        $user = $model->getById($id);
+
+        $view = 'admin/views/users/edit.php';
+        include 'admin/header.php';
+        include $view;
+    }
+
+    // método modificar usuario
+    public function update()
+    {
+        $id       = $_POST['id'] ?? null;
+        $nickname = $_POST['nickname'] ?? null;
+        $email    = $_POST['email'] ?? null;
+        $admin    = isset($_POST['admin']) ? 1 : 0;
+
+        $model = new User();
+        $model->updateUser($id, $nickname, $email, $admin);
+
+        header("Location: index.php?controller=user&action=list");
+        exit;
+    }
+
+    // método eliminar usuario
+    public function delete()
+    {
+        $id = $_GET['id'] ?? null;
+
+        if (!$id) {
+            echo "Error: ID no válido.";
+            exit;
+        }
+
+        $model = new User();
+        $model->delete($id);
+
+        header("Location: index.php?controller=user&action=list");
     }
 }

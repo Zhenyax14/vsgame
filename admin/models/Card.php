@@ -3,22 +3,22 @@ include 'Database.php';
 
 class Card extends Database{
     public function getAll() {
-        $sql = "SELECT * FROM cards";
+        $sql = "SELECT * FROM cartas";
         $stmt = $this->conex->query($sql);
         // devolvemos un array asociativo
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getById($id) {
-        $sql = "SELECT * FROM cards WHERE id = :id";
-        $stmt = $this->conex->query($sql);
+        $sql = "SELECT * FROM cartas WHERE id = :id";
+        $stmt = $this->conex->prepare($sql);
         $stmt->bindValue(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create($nombre, $ataque, $defensa, $poder, $tipo, $imagen = null) {
-        $sql = "INSERT INTO cards (nombre, ataque, defensa, imagen, poder, tipo)
+    public function create($nombre, $ataque, $defensa, $poder, $tipo, $imagen = null, $descripcion = null) {
+        $sql = "INSERT INTO cartas (nombre, ataque, defensa, imagen, poder, tipo)
         VALUES (:nombre, :ataque, :defensa, :imagen, :poder, :tipo)";
         // preparamos la consulta y vinculamos parámetros
         $stmt = $this->conex->prepare($sql);
@@ -33,8 +33,8 @@ class Card extends Database{
         return $stmt->execute();
     }
 
-    public function update($id, $nombre, $ataque, $defensa, $poder, $tipo, $imagen = null) {
-        $sql = "UPDATE cards SET nombre = :nombre, ataque = :ataque, defensa = :defensa, poder = :poder, tipo = :tipo, imagen = :imagen
+    public function update($id, $nombre, $ataque, $defensa, $poder, $tipo, $imagen = null, $descripcion = null) {
+        $sql = "UPDATE cartas SET nombre = :nombre, ataque = :ataque, defensa = :defensa, poder = :poder, tipo = :tipo, imagen = :imagen, descripcion = :descripcion
         WHERE id = :id";
 
         $stmt = $this->conex->prepare($sql);
@@ -51,7 +51,7 @@ class Card extends Database{
     }
 
     public function delete($id){
-        $sql = "DELETE FROM cards WHERE id = :id";
+        $sql = "DELETE FROM cartas WHERE id = :id";
         $stmt = $this->conex->prepare($sql);
         $stmt->bindValue(':id', $id);
         return $stmt->execute();
