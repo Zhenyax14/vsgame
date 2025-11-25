@@ -168,6 +168,14 @@ img{
     transition: all 1s ease-in-out;
 }
 
+#logout{
+    position: absolute;
+    top: -5px;
+    left: 30px;
+    width: 100px;
+    transition: all 1s ease-in-out;
+}
+
 #restartGame:hover{
     top: 15px;
     transition: all 1s ease-in-out;

@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showRegister = document.getElementById("showRegister");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
+    const logout = document.getElementById("logout");
 
     //Cambiar entre formularios
     showRegister.addEventListener("click", (e) => {
@@ -51,6 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Hacer fetch de registro
         const response = await fetch("http://localhost/Proyecto/vsgame/api/register.php", {
+
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -85,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         //fetch de login
         const response = await fetch("http://localhost/Proyecto/vsgame/api/login.php", {
+
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -101,9 +104,27 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(result.message); }
     });
 
+    //Logout
+    logout.addEventListener("click", async () => {
+        const response = await fetch("http://localhost/Proyecto/vsgame/api/logout.php", {
+                method: "POST",
+                credentials: "include"
+        });
+
+        const result = await response.json();
+
+        if(result.succes){
+            window.location.href = "login.php";
+        } else {
+            alert("Error al cerrar sesión");
+        }
+    });
+
+
+
     //LÓGICA DEL JUEGO
 
-    const opcionJugada = document.getElementById('opcionJugada');
+    //const opcionJugada = document.getElementById('opcionJugada');
     const atacar = document.getElementById('atacar');
     const defender = document.getElementById('defender');
     const playerCard = document.getElementById('playerCard');
@@ -127,7 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function cargarMazo() {
+
         const response = await fetch("http://localhost/Proyecto/vsgame/api/start_game.php");
+
         const data = await response.json();
         gameState.mazo = data.mazo;
         elegirCartas();

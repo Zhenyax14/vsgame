@@ -9,13 +9,13 @@
 </head>
 <body>
 
-<form action="" method="GET" id="formEnvio" style="display: none";>
+<!--<form action="" method="GET" id="formEnvio" style="display: none";>
     <select name="opcionJugada" id="opcionJugada">
         <option value="ataque">Ataque</option>
         <option value="defensa">Defensa</option>
     </select>
     <input type="submit" value="Enviar">
-</form>
+</form> -->
 
 <div class="container">
     <div class="card" id="playerCard">
@@ -26,10 +26,10 @@
     </div>
 <div class="container">
     <div class="buttons" >
-      <a href="#" id="atacar" onclick="atacar(); return false"> <!-- FALTA ENLACE Y CAMBIAR ONCLICK POR EVENTOS-->
+      <a href="#" id="atacar">
         <img src="assets/images/atacar.png" alt="Carta del Jugador" class="btn" >
       </a>
-      <a href="#" id="defender"  onclick="defender(); return false">
+      <a href="#" id="defender">
         <img src="assets/images/defender.png" alt="Carta del Jugador" class="btn" >
       </a>
     </div>
@@ -38,32 +38,31 @@
   <button id='restartBtn'>
       <img src="assets/images/restartgame.png" alt="reiniciar" id="restartGame">
   </button>
+  <button id='logout'>
+      <img src="assets/images/logout.png" alt="reiniciar" id="restartGame">
+  </button>
 <div class="score">
     <div class="contentScore">
     <div id="bandera" class="show">
       <img src="assets/images/win1.png" alt="win1" class="win1">
-      <!-- win2.png quizá no es necesaria, en el video demo nunca se activa-->
       <!-- <img src="img/win2.png" alt="win2" class="win2"> -->
      
     </div>
       <img src="assets/images/score.png" alt="reiniciar" id="scoreGame">
       <div class="ronda">
-        1
       </div>
       <div class="puntuacionJugador">
-        2
       </div>
       <div class="puntuacionCpu">
-         3
       </div>
     </div>
 </div>
 
-<div class="popup active" id="popup">
+<div class="popup" id="popup">
         <div class="popup-content">
             <button class="close-btn" id="closePopupBtn">&times;</button>
             <h2>Jugada</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum, provident.</p>
+            <p></p>
         </div>
     </div>
 </body>
