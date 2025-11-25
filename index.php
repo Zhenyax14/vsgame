@@ -1,22 +1,26 @@
-<? // Configura controlador y acción predeterminado
-$controller = isset($_GET['controller']) ? $_GET['controller'] :
-    'controllerdefecto';
+<?php
+
+// Configura controlador y acción por defecto
+$controller = isset($_GET['controller']) ? $_GET['controller'] : 'controllerdefecto';
 $action = isset($_GET['action']) ? $_GET['action'] : 'actiondefecto';
+
 // Construye el nombre del archivo y de la clase del controlador
-$controllerFile = "controllers/" . ucfirst($controller) . "Controller.php";
+$controllerFile = "admin/controllers/" . ucfirst($controller) . "Controller.php";
 $controllerClass = ucfirst($controller) . "Controller";
+
 // Verifica si el archivo del controlador existe
 if (file_exists($controllerFile)) {
-    require_once $controllerFile; // Cargo el Archivo necesario
+    require_once $controllerFile;
+
     // Verifica si la clase del controlador existe
     if (class_exists($controllerClass)) {
-        $controllerObject = new $controllerClass(); // Crea una instancia del controlador
-        // Verifica si el método (acción) existe en el controlador
+        $controllerObject = new $controllerClass();
+
+        // Verifica si la acción existe
         if (method_exists($controllerObject, $action)) {
-            $controllerObject->$action(); // Ejecuta la acción
+            $controllerObject->$action();
         } else {
-            echo "Error: Acción '$action' no encontrada en el controlador
-'$controllerClass'.";
+            echo "Error: Acción '$action' no encontrada en el controlador '$controllerClass'.";
         }
     } else {
         echo "Error: Clase de controlador '$controllerClass' no encontrada.";
