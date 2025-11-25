@@ -1,5 +1,5 @@
 <?php 
-include './admin/config/database.php';
+include __DIR__ . '/../config/database.php';
 
 class Database {
     protected $conex;

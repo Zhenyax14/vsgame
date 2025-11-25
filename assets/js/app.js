@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     //Hacer fetch de registro
-        const response = await fetch("/vsgame/api/register.php", {
+        const response = await fetch("http://localhost/Proyecto/vsgame/api/register.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

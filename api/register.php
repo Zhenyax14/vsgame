@@ -12,12 +12,15 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Incluir el modelo User
-require_once "../models/User.php";
+require_once __DIR__ . '/../admin/models/User.php';
+
 
 // Recibir datos del FE
-$nickname = $_POST['nickname'] ?? null;
-$email    = $_POST['email'] ?? null;
-$password = $_POST['password'] ?? null;
+$data = json_decode(file_get_contents("php://input"), true);
+
+$email = trim($data["email"] ?? "");
+$nickname = trim($data["nickname"] ?? "");
+$password = trim($data["password"] ?? "");
 
 // Validación de entrada
 if (!$nickname || !$email || !$password) {
