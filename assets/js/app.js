@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         //fetch de login
-        const response = await fetch("/api/login.php", {
+        const response = await fetch("http://localhost/Proyecto/vsgame/api/login.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

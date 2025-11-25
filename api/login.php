@@ -11,14 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-require_once "../models/User.php";
+require_once __DIR__ . '/../admin/models/User.php';
+
+$data = json_decode(file_get_contents("php://input"), true);
 
 // Recibir datos del FE
-$email    = trim($_POST['email']) ?? null;
-$password = trim($_POST['password']) ?? null;
+$email = trim($data["email"] ?? "");
+$password = trim($data["password"] ?? "");
 
 // Validación de datos
-if (!isset($_POST['email']) || !isset($_POST['password'])) {
+if (!$email || !$password) {
     echo json_encode([
         "success" => false,
         "message" => "Faltan campos obligatorios."
