@@ -8,3 +8,7 @@ Temas hablados:
 
 ## 21.11.2025
 Asistencia remota con las tarjetas sobre la BBDD entre los 3
+
+
+# 25.11.2025
+Colaboración en clase. Dudas en como vincular FE y BE
