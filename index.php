@@ -1,8 +1,27 @@
 <?php
+session_set_cookie_params([
+    'lifetime' => 0,
+    'path' => '/Proyecto/vsgame',
+    'httponly' => true,
+    'samesite' => 'Lax'
+]);
+
+session_start();
+
+// si no se loguea como admin, no se puede entrar al panel de administración
+if (
+    !(isset($_GET['controller']) && $_GET['controller'] === 'user' &&
+      isset($_GET['action']) && $_GET['action'] === 'login')
+) {
+    if (!isset($_SESSION['admin'])) {
+        header("Location: admin/login.php");
+        exit;
+    }
+}
 
 // Configura controlador y acción por defecto
-$controller = isset($_GET['controller']) ? $_GET['controller'] : 'controllerdefecto';
-$action = isset($_GET['action']) ? $_GET['action'] : 'actiondefecto';
+$controller = isset($_GET['controller']) ? $_GET['controller'] : 'user';
+$action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
 // Construye el nombre del archivo y de la clase del controlador
 $controllerFile = "admin/controllers/" . ucfirst($controller) . "Controller.php";

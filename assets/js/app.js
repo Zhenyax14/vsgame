@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", () => {
     registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const user = document.querySelector("#registerForm input[name='user']").value.trim();
+        const nickname = document.querySelector("#registerForm input[name='nickname']").value.trim();
         const email = document.querySelector("#registerForm input[name='email']").value.trim();
         const password = document.querySelector("#registerForm input[name='password']").value;
         const confirmPass = document.querySelector("#registerForm input[name='confirmPass']").value;
 
-        if (!user || !email || !password || !confirmPass) {
+        if (!nickname || !email || !password || !confirmPass) {
             alert("Todos los campos son obligatorios");
             return;
         }
@@ -49,12 +49,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
     //Hacer fetch de registro
-        const response = await fetch("/api/register.php", {
+        const response = await fetch("/vsgame/api/register.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({email, user, password})
+            body: JSON.stringify({nickname, email, password})
         });
 
         const result = await response.json();
@@ -71,10 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
     //Login
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const user = document.querySelector("#loginForm input[name='user']").value.trim();
+        const nickname = document.querySelector("#loginForm input[name='nickname']").value.trim();
         const password = document.querySelector("#loginForm input[name='password']").value;
         
-        if(!user || !password) {
+        if(!nickname || !password) {
             alert("Introduce usuario y contraseña");
             return;
         }
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({user, password})
+                body: JSON.stringify({nickname, password})
         });
 
         const result = await response.json();
