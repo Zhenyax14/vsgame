@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     async function cargarMazo() {
-        const response = await fetch("/api/start_game.php");
+        const response = await fetch("http://localhost/Proyecto/vsgame/api/start_game.php");
         const data = await response.json();
         gameState.mazo = data.mazo;
         elegirCartas();
