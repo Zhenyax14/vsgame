@@ -328,10 +328,14 @@ h2 {
     text-shadow: -1px 1px 0 rgb(216, 216, 216);
 }
 
+#formularios {
+    padding-right: 25px;
+}
+
 .btn-form {
     font-family: 'Uncial Antiqua', serif;
     font-size: 16px;
-    border-radius: 6px;
+    border-radius: 20px;
     height: 30px;
     width: 150px;
     background-color: #16560f;
@@ -342,6 +346,36 @@ h2 {
 .logo {
     padding: 10px 0;
     width: 200px;
+}
+
+.card .stat-ataque {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.card .stat-defensa {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: green;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 }
 
 
