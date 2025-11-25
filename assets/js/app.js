@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const showRegister = document.getElementById("showRegister");
     const loginForm = document.getElementById("loginForm");
     const registerForm = document.getElementById("registerForm");
+
     //Cambiar entre formularios
     showRegister.addEventListener("click", (e) => {
         e.preventDefault();
@@ -21,12 +22,12 @@ document.addEventListener("DOMContentLoaded", () => {
     registerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const user = document.querySelector("#registerForm input[name='user']").value.trim();
+        const nickname = document.querySelector("#registerForm input[name='nickname']").value.trim();
         const email = document.querySelector("#registerForm input[name='email']").value.trim();
         const password = document.querySelector("#registerForm input[name='password']").value;
         const confirmPass = document.querySelector("#registerForm input[name='confirmPass']").value;
 
-        if (!user || !email || !password || !confirmPass) {
+        if (!nickname || !email || !password || !confirmPass) {
             alert("Todos los campos son obligatorios");
             return;
         }
@@ -54,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({email, user, password})
+            body: JSON.stringify({email, nickname, password})
         });
 
         const result = await response.json();
@@ -71,11 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //Login
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const user = document.querySelector("#loginForm input[name='user']").value.trim();
+        const email = document.querySelector("#loginForm input[name='email']").value.trim();
         const password = document.querySelector("#loginForm input[name='password']").value;
         
-        if(!user || !password) {
-            alert("Introduce usuario y contraseña");
+        if(!email || !password) {
+            alert("Introduce email y contraseña");
             return;
         }
         //fetch de login
@@ -84,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({user, password})
+                body: JSON.stringify({email, password})
         });
 
         const result = await response.json();
@@ -94,4 +95,138 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(result.message); }
     });
 
+    //LÓGICA DEL JUEGO
+
+    const opcionJugada = document.getElementById('opcionJugada');
+    const atacar = document.getElementById('atacar');
+    const defender = document.getElementById('defender');
+    const playerCard = document.getElementById('playerCard');
+    const machineCard = document.getElementById('machineCard');
+    const ronda = document.getElementById('ronda');
+    const puntuacionJugador = document.getElementById('puntuacionJugador');
+    const puntuacionCpu = document.getElementById('puntuacionCpu');
+    const restartBtn = document.getElementById('restartBtn');
+    const popup = document.getElementById('popup');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+
+    const gameState = {
+        ronda: 1,
+        maxRondas: 5,
+        scoreJugador: 0,
+        scoreCpu: 0,
+        playerCard: null,
+        machineCard: null,
+        mazo: [],
+        historial: []
+    };
+
+    async function cargarMazo() {
+        const response = await fetch("/api/start_game.php");
+        const data = await response.json();
+        gameState.mazo = data.mazo;
+        elegirCartas();
+    }
+
+    function elegirCartas() {
+        const indiceJugador = Math.floor(Math.random() * gameState.mazo.length);
+        const indiceCpu = Math.floor(Math.random() * gameState.mazo.length);
+        gameState.playerCard = gameState.mazo[indiceJugador];
+        gameState.machineCard = gameState.mazo[indiceCpu];
+
+        actualizarUI();
+    }
+
+    function actualizarUI() {
+        playerCard.innerHTML = `
+        <img src="${gameState.playerCard.imagen}" alt="${gameState.playerCard.nombre}" class="card-img">
+        <div class="stat-ataque">${gameState.playerCard.ataque}</div>
+        <div class="stat-defensa">${gameState.playerCard.defensa}</div>`;
+
+        machineCard.innerHTML = `
+        <img src="${gameState.machineCard.imagen}" alt="${gameState.machineCard.nombre}" class="card-img">
+        <div class="stat-ataque">${gameState.machineCard.ataque}</div>
+        <div class="stat-defensa">${gameState.machineCard.defensa}</div>`;
+    
+    ronda.textContent = gameState.ronda;
+    puntuacionJugador.textContent = gameState.scoreJugador;
+    puntuacionCpu.textContent = gameState.scoreCpu;
+
+    }
+
+    function jugarRonda(accionJugador) {
+        let jugadorValor;
+
+        if(accionJugador === 'ataque') {
+        jugadorValor = gameState.playerCard.ataque;
+        } else {
+        jugadorValor = gameState.playerCard.defensa;
+        }
+
+        let accionCpu;
+        let cpuValor;
+
+        if (Math.random() < 0.5) {
+         accionCpu = 'ataque';
+         cpuValor = gameState.machineCard.ataque;
+        } else {
+         accionCpu = 'defensa';
+         cpuValor = gameState.machineCard.defensa;
+        }
+
+        let ganador;
+
+        if(jugadorValor > cpuValor) {
+         ganador = "Jugador";
+         gameState.scoreJugador++;
+        } else if(cpuValor > jugadorValor) {
+         ganador = "CPU";
+         gameState.scoreCpu++;
+        } else {
+         ganador = "Empate";
+        }
+
+        popup.querySelector("h2").textContent = `Ronda: ${gameState.ronda}`;
+        popup.querySelector("p").textContent = `Ganador de la ronda: ${ganador} (El rival usó ${accionCpu})`;
+        popup.classList.add("active");
+
+        gameState.ronda++;
+
+        if (gameState.ronda > gameState.maxRondas) {
+            popup.querySelector("h2").textContent = "Fin del juego";
+            popup.querySelector("p").textContent = `Jugador: ${gameState.scoreJugador} | Cpu: ${gameState.scoreCpu}`;
+        }
+    }
+
+    function reiniciarJuego() {
+        gameState.ronda = 1;
+        gameState.scoreJugador = 0;
+        gameState.scoreCpu = 0;
+        gameState.historial = [];
+        elegirCartas();
+    }
+
+    //LISTENERS
+    atacar.addEventListener('click', () => {
+        jugarRonda('ataque');
+    })
+
+    defender.addEventListener('click', () => {
+        jugarRonda('defensa');
+    })
+
+    closePopupBtn.addEventListener('click', () => {
+        popup.classList.remove('active');
+        if (gameState.ronda > gameState.maxRondas) {
+            reiniciarJuego();
+        }
+    });
+
+    restartBtn.addEventListener('click', reiniciarJuego);
+    
+    //INICIO
+    async function init() {
+        await cargarMazo();
+    };
+
+    init();
 });

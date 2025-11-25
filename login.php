@@ -16,7 +16,7 @@
         <div id="formularios">
             <form id="loginForm">
                 <h2>Inicia sesión</h2>
-                <input type="text" name="user" placeholder="Usuario"><br><br>
+                <input type="email" name="email" placeholder="Email"><br><br>
                 <input type="password" name="password" placeholder="Contraseña"><br><br>
                 <button type="submit" class="btn-form">Entrar</button>
 
@@ -28,7 +28,7 @@
             <form id="registerForm">
                 <h2>Crea una cuenta</h2>
                 <input type="email" name="email" placeholder="Email"><br><br>
-                <input type="text" name="user" placeholder="Usuario"><br><br>
+                <input type="text" name="nickname" placeholder="Nombre de usuario"><br><br>
                 <input type="password" name="password" placeholder="Contraseña"><br><br>
                 <input type="password" name="confirmPass" placeholder="Repite Contraseña"><br><br>
                 <button type="submit" class="btn-form">Registrarme</button>
