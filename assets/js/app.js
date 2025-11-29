@@ -115,7 +115,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //Logout
     if(logout) {
         logout.addEventListener("click", async () => {
-            console.log("CLICK LOGOUT");
             const response = await fetch("http://localhost/vsgame/api/logout.php", {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
@@ -142,12 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const defender = document.getElementById('defender');
     const playerCard = document.getElementById('playerCard');
     const machineCard = document.getElementById('machineCard');
-    const ronda = document.getElementsByClassName('ronda');
-    const puntuacionJugador = document.getElementsByClassName('puntuacionJugador');
-    const puntuacionCpu = document.getElementsByClassName('puntuacionCpu');
+    const ronda = document.querySelector('.ronda');
+    const puntuacionJugador = document.querySelector('.puntuacionJugador');
+    const puntuacionCpu = document.querySelector('.puntuacionCpu');
     const restartBtn = document.getElementById('restartBtn');
     const popup = document.getElementById('popup');
     const closePopupBtn = document.getElementById('closePopupBtn');
+    
 
     const gameState = {
         ronda: 1,
@@ -189,9 +189,9 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stat-ataque">${gameState.machineCard.ataque}</div>
         <div class="stat-defensa">${gameState.machineCard.defensa}</div>`;
     
-    ronda.textContent = gameState.ronda;
-    puntuacionJugador.textContent = gameState.scoreJugador;
-    puntuacionCpu.textContent = gameState.scoreCpu;
+        ronda.textContent = gameState.ronda;
+        puntuacionJugador.textContent = gameState.scoreJugador;
+        puntuacionCpu.textContent = gameState.scoreCpu;
 
     }
 
@@ -232,6 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         popup.classList.add("active");
 
         gameState.ronda++;
+        ronda.textContent = gameState.ronda;
 
         if (gameState.ronda > gameState.maxRondas) {
             popup.querySelector("h2").textContent = "Fin del juego";
