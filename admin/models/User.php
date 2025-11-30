@@ -66,15 +66,16 @@ class User extends Database{
     }
 
     // método para modificar usuario
-    public function updateUser($id, $nickname, $email, $admin) {
+    public function updateUser($id, $nickname, $email, $admin, $password = "") {
         $sql = "UPDATE usuarios 
-                SET nickname = :nickname, email = :email, admin = :admin
-                WHERE id = :id";
+                SET nickname = :nickname, email = :email, admin = :admin, password = :password WHERE id = :id";
 
         $stmt = $this->conex->prepare($sql);
+
         $stmt->bindValue(':nickname', $nickname);
         $stmt->bindValue(':email', $email);
-        $stmt->bindValue(':admin', $admin);
+        $stmt->bindValue(":admin", $admin, PDO::PARAM_INT);
+        $stmt->bindValue(":password", password_hash($password, PASSWORD_DEFAULT));
         $stmt->bindValue(':id', $id);
 
         return $stmt->execute();

@@ -1,13 +1,26 @@
 <?php
 header('Content-Type: application/json');
+session_start();
 
-$scoresFile = 'scores.json';
+// Solo permitir POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo json_encode([
+        "success" => false,
+        "message" => "Método no permitido"
+    ]);
+    exit;
+}
 
-// Obtener datos enviados en JSON
-$input = json_decode(file_get_contents('php://input'), true);
+require_once __DIR__ . '/../admin/models/Game.php';
 
-// Validación
-if (!isset($input['user']) || !isset($input['score'])) {
+// Recibir datos del FE
+$data = json_decode(file_get_contents("php://input"), true);
+
+$usuarioId  = $_SESSION['user_id'] ?? null;
+$puntuacion = $data['score'] ?? null;
+$resultado  = $data['result'] ?? null;
+
+if (!$usuarioId || $puntuacion === null || !$resultado) {
     echo json_encode([
         "success" => false,
         "message" => "Datos incompletos"
@@ -15,39 +28,17 @@ if (!isset($input['user']) || !isset($input['score'])) {
     exit;
 }
 
-$entry = [
-    'user'  => $input['user'],
-    'score' => (int)$input['score']
-];
+// Convertimos win/lose al enum MySQL
+if ($resultado === "win")  $resultado = "victoria";
+if ($resultado === "lose") $resultado = "derrota";
 
-// Leer el archivo de scores si existe (si no existe se crea)
-$data = [];
-
-if (file_exists($scoresFile)) {
-    $decoded = json_decode(file_get_contents($scoresFile), true);
-    if (is_array($decoded)) {
-        $data = $decoded;
-    }
-}
-
-// Añadir la nueva entrada
-$data[] = $entry;
-
-// Guardar el archivo
-$success = file_put_contents($scoresFile, json_encode($data));
-
-if ($success === false) {
-    echo json_encode([
-        "success" => false,
-        "message" => "No se pudo guardar la puntuación"
-    ]);
-    exit;
-}
+$game = new Game();
+$ok = $game->save($usuarioId, $puntuacion, $resultado);
 
 echo json_encode([
-    "success" => true,
-    "message" => "Puntuación guardada"
+    "success" => $ok,
+    "message" => $ok ? "Partida guardada correctamente" : "Error al guardar partida"
 ]);
-
+exit;
 
 
