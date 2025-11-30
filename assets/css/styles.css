@@ -168,17 +168,23 @@ img{
     transition: all 1s ease-in-out;
 }
 
-#logout{
+#logoutBtn{
     position: absolute;
-    top: -5px;
-    left: 30px;
+    top: 20px;
+    left: 20px;
     width: 100px;
     transition: all 1s ease-in-out;
 }
 
-#restartGame:hover{
+#restartGame:hover, #logoutBtn:hover{
     top: 15px;
     transition: all 1s ease-in-out;
+}
+
+#restartBtn, #logout {
+    background: transparent;
+    border: none;
+    padding: 0;
 }
 /* score */
 .score{
