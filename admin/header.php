@@ -1,4 +1,13 @@
-<?php ?>
+<?php 
+// Si hay ya una sesión iniciada no la vuelves a iniciar
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Importamos la constante BASE_URL (muy importante)
+require_once __DIR__ . '/views/config/config.php';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 

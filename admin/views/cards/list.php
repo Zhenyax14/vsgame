@@ -10,9 +10,10 @@
                 <th>Nombre</th>
                 <th>Ataque</th>
                 <th>Defensa</th>
-                <th>Imagen</th>
-                <th>Poder especial</th>
+                <th>Poder</th>
                 <th>Tipo</th>
+                <th>Imagen</th>
+                <th>Descripción</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,12 +35,12 @@
 
                         <td>
                             <?php if (!empty($card['imagen'])): ?>
-                                <img src="uploads/<?= $card['imagen'] ?>" width="60">
+                                <img src="<?= BASE_URL ?>assets/images/cards/<?=$card['imagen'] ?>" width="60">
                             <?php else: ?>
                                 (sin imagen)
                             <?php endif; ?>
                         </td>
-
+                        <td><?= $card['descripcion'] ?></td>        
                         <td>
                             <a href="index.php?controller=card&action=edit&id=<?= $card['id'] ?>">✏️ Editar</a>
                             |
