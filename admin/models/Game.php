@@ -15,7 +15,7 @@ class Game extends Database
         $stmt->bindValue(':puntuacion', $puntuacion);
         $stmt->bindValue(':resultado', $resultado);
         // se devuelve resultado de la ejecución de la consulta
-        $stmt->execute();
+        return $stmt->execute();
     }
     // método para obtener lar partidas de un usuario
     public function getUserGames($userId)

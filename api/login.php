@@ -1,7 +1,8 @@
 <?php
-header("Content-Type: application/json");
+ini_set('session.cookie_path', '/Proyecto/vsgame/');
 session_start();
 
+header("Content-Type: application/json");
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode([
@@ -49,11 +50,13 @@ if (!password_verify($password, $datosUser['password'])) {
     exit;
 }
 
+$_SESSION['user_id'] = $datosUser['id'];
+
 // Login correcto? guardamos sesión
 $_SESSION['user'] = [
     "id" => $datosUser['id'],
-    "email" => $datosUser['nickname'],
-    "nickname" => $datosUser['email']
+    "email" => $datosUser['email'],
+    "nickname" => $datosUser['nickname']
 ];
 
 // Respuesta 

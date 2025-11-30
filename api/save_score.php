@@ -1,6 +1,8 @@
 <?php
-header('Content-Type: application/json');
+ini_set('session.cookie_path', '/Proyecto/vsgame/');
 session_start();
+
+header('Content-Type: application/json');
 
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -19,6 +21,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 $usuarioId  = $_SESSION['user_id'] ?? null;
 $puntuacion = $data['score'] ?? null;
 $resultado  = $data['result'] ?? null;
+
 
 if (!$usuarioId || $puntuacion === null || !$resultado) {
     echo json_encode([
@@ -40,5 +43,3 @@ echo json_encode([
     "message" => $ok ? "Partida guardada correctamente" : "Error al guardar partida"
 ]);
 exit;
-
-
