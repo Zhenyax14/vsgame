@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         //Hacer fetch de registro
-            const response = await fetch("http://localhost/vsgame/api/register.php", {
+            const response = await fetch("http://localhost/Proyecto/vsgame/api/register.php", {
 
                 method: "POST",
                 headers: {
@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
             //fetch de login
-            const response = await fetch("http://localhost/vsgame/api/login.php", {
+            const response = await fetch("http://localhost/Proyecto/vsgame/api/login.php", {
 
                     method: "POST",
                     headers: {
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //Logout
     if(logout) {
         logout.addEventListener("click", async () => {
-            const response = await fetch("http://localhost/vsgame/api/logout.php", {
+            const response = await fetch("http://localhost/Proyecto/vsgame/api/logout.php", {
                     method: "POST",
                     headers: { "Content-type": "application/json" },
                     credentials: "include",
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function cargarMazo() {
 
-        const response = await fetch("http://localhost/vsgame/api/start_game.php");
+        const response = await fetch("http://localhost/Proyecto/vsgame/api/start_game.php");
 
         const data = await response.json();
         gameState.mazo = data.mazo;
