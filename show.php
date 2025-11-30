@@ -39,7 +39,7 @@
       <img src="assets/images/restartgame.png" alt="reiniciar" id="restartGame">
   </button>
   <button id='logout'>
-      <img src="assets/images/logout.png" alt="reiniciar" id="restartGame">
+      <img src="assets/images/logout.png" alt="reiniciar" id="logoutBtn">
   </button>
 <div class="score">
     <div class="contentScore">
