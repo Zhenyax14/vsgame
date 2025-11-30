@@ -19,7 +19,7 @@ class CardController
     // MOSTRAR FORMULARIO DE CREACIÓN
     public function create()
     {
-        
+        $error = "";
         $view = 'admin/views/cards/create.php';
         include 'admin/header.php';
         include $view;
@@ -31,11 +31,23 @@ class CardController
         $model = new Card();
 
         // Recogemos datos del formulario
-        $nombre = $_POST['nombre'];
-        $ataque = $_POST['ataque'];
-        $defensa = $_POST['defensa'];
-        $poder = $_POST['poder'];
-        $tipo = $_POST['tipo'];
+        $nombre = trim($_POST['nombre'] ?? "");
+        $ataque = filter_var($_POST['ataque'] ?? null, FILTER_VALIDATE_INT);
+        $defensa = filter_var($_POST['defensa'] ?? null, FILTER_VALIDATE_INT);
+        $poder = trim($_POST['poder'] ?? "");
+        $tipo = trim($_POST['tipo'] ?? "");
+        $descripcion = trim($_POST['descripcion'] ?? "");
+
+        if (
+            $nombre === "" || 
+            $ataque === false || $defensa === false ||
+            $tipo === "" || $tipo === ""
+        ) {
+            $error = "Esos campos son obligatorios.";
+            require_once "views/layout.php";
+            require_once "views/cards/create.php";
+            return;
+        }
 
         // Manejo de imagen
         $imagen = null;
@@ -45,7 +57,7 @@ class CardController
         }
 
         // Guardamos en la base de datos
-        $model->create($nombre, $ataque, $defensa, $poder, $tipo, $imagen);
+        $model->create($nombre, $ataque, $defensa, $poder, $tipo, $imagen, $descripcion);
 
         // Redirigimos al listado
         header("Location: index.php?controller=card&action=list");
@@ -72,11 +84,23 @@ class CardController
 
         $model = new Card();
 
-        $nombre = $_POST['nombre'];
-        $ataque = $_POST['ataque'];
-        $defensa = $_POST['defensa'];
-        $poder = $_POST['poder'];
-        $tipo = $_POST['tipo'];
+        $nombre = trim($_POST['nombre'] ?? "");
+        $ataque = filter_var($_POST['ataque'] ?? null, FILTER_VALIDATE_INT);
+        $defensa = filter_var($_POST['defensa'] ?? null, FILTER_VALIDATE_INT);
+        $poder = trim($_POST['poder'] ?? "");
+        $tipo = trim($_POST['tipo'] ?? "");
+        $descripcion = trim($_POST['descripcion'] ?? "");
+
+        if (
+            $nombre === "" || 
+            $ataque === false || $defensa === false ||
+            $tipo === "" || $tipo === ""
+        ) {
+            $error = "Esos campos son obligatorios.";
+            require_once "views/layout.php";
+            require_once "views/cards/create.php";
+            return;
+        }
 
         // Manejo de imagen (si sube una nueva)
         $imagen = $_POST['imagen_actual']; // por defecto mantiene la que tenía
@@ -87,7 +111,7 @@ class CardController
         }
 
         // Actualizamos
-        $model->update($id, $nombre, $ataque, $defensa, $poder, $tipo, $imagen);
+        $model->update($id, $nombre, $ataque, $defensa, $poder, $tipo, $imagen, $descripcion);
 
         header("Location: index.php?controller=card&action=list");
         exit();

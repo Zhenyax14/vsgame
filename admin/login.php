@@ -4,7 +4,7 @@ session_start();
 
 // si está logueado comoa admin, lo mandamos al panel
 if (isset($_SESSION['admin'])) {
-    header("Location: ../index.php");
+    header("Location: ../index.php?controller=user&action=list");
     exit;
 }
 ?>

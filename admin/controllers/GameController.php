@@ -1,11 +1,6 @@
 <?php
-include 'models/User.php';
+include 'models/Game.php';
 
-class UserController {
-    public function startGame(){}
-
-    public function saveScore() {}
-
-    public function getUserStats() {}
-
+class GameController {
+    // Controlador reservado para futuras vistas del panel admin
 }

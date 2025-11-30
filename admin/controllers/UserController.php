@@ -1,6 +1,5 @@
 <?php
 include __DIR__ . '/../models/User.php';
-//include './admin/models/User.php';
 
 class UserController
 {
@@ -13,10 +12,11 @@ class UserController
         // si se envía por POST
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            $nickname = $_POST['nickname'] ?? null;
-            $email    = $_POST['email'] ?? null;
-            $password = $_POST['password'] ?? null;
+            $nickname = trim($_POST['nickname'] ?? null);
+            $email    = trim($_POST['email'] ?? null);
+            $password = trim($_POST['password'] ?? null);
             $admin    = isset($_POST['admin']) ? 1 : 0;
+
             // Validación campos
             if (!$nickname || !$email || !$password) {
                 $mensaje = "Todos los campos son obligatorios.";
@@ -41,7 +41,7 @@ class UserController
     public function login()
     {
         session_start();
-        
+
 
         $email = $_POST['email'] ?? null;
         $password = $_POST['password'] ?? null;
@@ -61,14 +61,14 @@ class UserController
             header("Location: admin/login.php");
             exit;
         }
-        
+
         $_SESSION['admin'] = [
             "id"       => $user['id'],
             "email"    => $user['email'],
             "nickname" => $user['nickname']
         ];
 
-        header("Location: index.php");
+        header("Location: index.php?controller=user&action=list");
         exit;
     }
 
@@ -77,10 +77,9 @@ class UserController
     {
         session_start();
         // eliminar datos del usuario
-         $_SESSION = [];
-
-    // Regenerar ID para evitar sesiones corruptas
-    session_regenerate_id(true);
+        unset($_SESSION['admin']);
+        session_destroy();
+        
         header("Location: admin/login.php");
         exit;
     }
@@ -125,13 +124,31 @@ class UserController
         $id       = $_POST['id'] ?? null;
         $nickname = $_POST['nickname'] ?? null;
         $email    = $_POST['email'] ?? null;
-        $admin    = isset($_POST['admin']) ? 1 : 0;
+        $admin    = $_POST['admin'] ?? 0;
+        $password = trim($_POST['password'] ?? "");
 
         $model = new User();
-        $model->updateUser($id, $nickname, $email, $admin);
 
-        header("Location: index.php?controller=user&action=list");
-        exit;
+        // Validar que no exista otro usuario con ese email
+        $users = $model->getAll();
+
+        foreach ($users as $u) {
+            // si el email coincide con otro usuario distinto del que estamos editando
+            if ($u['email'] === $email && $u['id'] != $id) {
+
+                $user = $model->getById($id); // cargar datos actuales para mantenerlos
+
+                $mensaje = "El email ya está registrado por otro usuario.";
+
+                require_once "admin/views/users/edit.php";
+                return;
+            }
+        }
+            $model->updateUser($id, $nickname, $email, $admin, $password);
+
+            header("Location: index.php?controller=user&action=list");
+            exit;
+        
     }
 
     // método eliminar usuario

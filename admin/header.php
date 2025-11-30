@@ -61,4 +61,5 @@ require_once __DIR__ . '/views/config/config.php';
         <?php endif; ?>
     </div>
 
+    <h1>Bienvenido, <?= $_SESSION['admin']['nickname']?></h1>
     <div class="content">

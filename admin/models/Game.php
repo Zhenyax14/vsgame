@@ -4,18 +4,18 @@ include 'Database.php';
 class Game extends Database
 {
     // método para guardar resultado
-    public function save($userId, $score, $result)
+    public function save($usuarioId, $puntuacion, $resultado)
     {
         // consulta sql para insertar
-        $sql = "INSERT INTO games (user_id, score, result)
-                VALUES (:user_id, :score, :result)";
+        $sql = "INSERT INTO partidas (usuario_id, puntuacion, resultado)
+                VALUES (:usuario_id, :puntuacion, :resultado)";
         // se prepara conexión y se vinculan parámetros
         $stmt = $this->conex->prepare($sql);
-        $stmt->bindValue(':user_id', $userId);
-        $stmt->bindValue(':score', $score);
-        $stmt->bindValue(':result', $result);
+        $stmt->bindValue(':usuario_id', $usuarioId);
+        $stmt->bindValue(':puntuacion', $puntuacion);
+        $stmt->bindValue(':resultado', $resultado);
         // se devuelve resultado de la ejecución de la consulta
-        return $stmt->execute();
+        $stmt->execute();
     }
     // método para obtener lar partidas de un usuario
     public function getUserGames($userId)
@@ -33,12 +33,12 @@ class Game extends Database
     public function getUserStats($userId)
     {
         $sql = "SELECT 
-                    COUNT(*) AS total_games,
-                    SUM(score) AS total_score,
-                    SUM(result = 'win') AS wins,
-                    SUM(result = 'lose') AS losses
-                FROM games
-                WHERE user_id = :user_id";
+                    COUNT(*) AS total_partidas,
+                    SUM(resultado = 'victoria') AS victorias,
+                    SUM(resultado = 'derrota') AS derrotas,
+                    SUM(duracion_seg) AS tiempo_total
+                FROM partidas
+                WHERE usuario_id = :user_id";
 
         $stmt = $this->conex->prepare($sql);
         $stmt->bindValue(':user_id', $userId);
