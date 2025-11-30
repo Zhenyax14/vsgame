@@ -180,12 +180,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function actualizarUI() {
         playerCard.innerHTML = `
-        <img src="${gameState.playerCard.imagen}" alt="${gameState.playerCard.nombre}" class="card-img">
+        <img src="assets/images/cards/${gameState.playerCard.imagen}" alt="${gameState.playerCard.nombre}" class="card-img">
         <div class="stat-ataque">${gameState.playerCard.ataque}</div>
         <div class="stat-defensa">${gameState.playerCard.defensa}</div>`;
 
         machineCard.innerHTML = `
-        <img src="${gameState.machineCard.imagen}" alt="${gameState.machineCard.nombre}" class="card-img">
+        <img src="assets/images/cards/${gameState.machineCard.imagen}" alt="${gameState.machineCard.nombre}" class="card-img">
         <div class="stat-ataque">${gameState.machineCard.ataque}</div>
         <div class="stat-defensa">${gameState.machineCard.defensa}</div>`;
     
@@ -233,6 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         gameState.ronda++;
         ronda.textContent = gameState.ronda;
+
+        if (gameState.ronda <= gameState.maxRondas) {
+        elegirCartas();
+        }
 
         if (gameState.ronda > gameState.maxRondas) {
             popup.querySelector("h2").textContent = "Fin del juego";
