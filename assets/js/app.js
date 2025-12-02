@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const showLogin = document.getElementById("showLogin");
     const showRegister = document.getElementById("showRegister");
     const loginForm = document.getElementById("loginForm");
@@ -180,12 +179,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function actualizarUI() {
         playerCard.innerHTML = `
-        <img src="${gameState.playerCard.imagen}" alt="${gameState.playerCard.nombre}" class="card-img">
+        <img src="assets/images/cards/${gameState.playerCard.imagen}" alt="${gameState.playerCard.nombre}" class="card-img">
         <div class="stat-ataque">${gameState.playerCard.ataque}</div>
         <div class="stat-defensa">${gameState.playerCard.defensa}</div>`;
 
         machineCard.innerHTML = `
-        <img src="${gameState.machineCard.imagen}" alt="${gameState.machineCard.nombre}" class="card-img">
+        <img src="assets/images/cards${gameState.machineCard.imagen}" alt="${gameState.machineCard.nombre}" class="card-img">
         <div class="stat-ataque">${gameState.machineCard.ataque}</div>
         <div class="stat-defensa">${gameState.machineCard.defensa}</div>`;
     
@@ -234,9 +233,32 @@ document.addEventListener("DOMContentLoaded", () => {
         gameState.ronda++;
         ronda.textContent = gameState.ronda;
 
+        if (gameState.ronda <= gameState.maxRondas) {
+            elegirCartas();
+        }
+
         if (gameState.ronda > gameState.maxRondas) {
             popup.querySelector("h2").textContent = "Fin del juego";
             popup.querySelector("p").textContent = `Jugador: ${gameState.scoreJugador} | Cpu: ${gameState.scoreCpu}`;
+
+            const result =
+            gameState.scoreJugador > gameState.scoreCpu ? "win" : "lose";
+
+            fetch("http://localhost/Proyecto/vsgame/api/save_score.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+                score: gameState.scoreJugador,
+                result: result,
+            }),
+        })
+        .then((r) => r.json())
+        .then((d) => {
+          console.log("Guardado partida:", d);
+        })
+        .catch((err) => console.error("Error guardando partida:", err));
+
         }
     }
 
