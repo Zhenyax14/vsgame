@@ -219,9 +219,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if(jugadorValor > cpuValor) {
          ganador = "Jugador";
          gameState.scoreJugador++;
+         puntuacionJugador.textContent = gameState.scoreJugador;
         } else if(cpuValor > jugadorValor) {
          ganador = "CPU";
          gameState.scoreCpu++;
+         puntuacionCpu.textContent = gameState.scoreCpu;
         } else {
          ganador = "Empate";
         }
