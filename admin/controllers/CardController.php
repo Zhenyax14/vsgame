@@ -52,8 +52,8 @@ class CardController
         // Manejo de imagen
         $imagen = null;
         if (!empty($_FILES['imagen']['name'])) {
-            $imagen = time() . "_" . $_FILES['imagen']['name'];
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "uploads/" . $imagen);
+            $imagen =$_FILES['imagen']['name'];
+            move_uploaded_file($_FILES['imagen']['tmp_name'], "assets/images/cards/" . $imagen);
         }
 
         // Guardamos en la base de datos
@@ -106,8 +106,8 @@ class CardController
         $imagen = $_POST['imagen_actual']; // por defecto mantiene la que tenía
 
         if (!empty($_FILES['imagen']['name'])) {
-            $imagen = time() . "_" . $_FILES['imagen']['name'];
-            move_uploaded_file($_FILES['imagen']['tmp_name'], "uploads/" . $imagen);
+            $imagen =$_FILES['imagen']['name'];
+            move_uploaded_file($_FILES['imagen']['tmp_name'], "assets/images/cards/" . $imagen);
         }
 
         // Actualizamos
