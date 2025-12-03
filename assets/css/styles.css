@@ -371,7 +371,7 @@ h2 {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: red;
+    background-color: orangered;
     color: white;
     display: flex;
     align-items: center;
@@ -386,7 +386,7 @@ h2 {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: green;
+    background-color: dodgerblue;
     color: white;
     display: flex;
     align-items: center;
