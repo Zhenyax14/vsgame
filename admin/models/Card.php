@@ -46,6 +46,8 @@ class Card extends Database{
         $stmt->bindValue(':imagen', $imagen);
         $stmt->bindValue(':poder', $poder);
         $stmt->bindValue(':tipo', $tipo);
+        $stmt->bindValue(':descripcion', $descripcion);
+
 
         return $stmt->execute();
     }
