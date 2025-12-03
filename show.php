@@ -10,14 +10,6 @@
 </head>
 <body>
 
-<!--<form action="" method="GET" id="formEnvio" style="display: none";>
-    <select name="opcionJugada" id="opcionJugada">
-        <option value="ataque">Ataque</option>
-        <option value="defensa">Defensa</option>
-    </select>
-    <input type="submit" value="Enviar">
-</form> -->
-
 <div class="container">
     <div class="card" id="playerCard">
     </div>
@@ -46,7 +38,7 @@
     <div class="contentScore">
     <div id="bandera" class="show">
       <img src="assets/images/win1.png" alt="win1" class="win1">
-      <!-- <img src="img/win2.png" alt="win2" class="win2"> -->
+      <img src="assets/images/win2.png" alt="win2" class="win2">
      
     </div>
       <img src="assets/images/score.png" alt="reiniciar" id="scoreGame">

@@ -165,9 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const popup = document.getElementById("popup");
   const closePopupBtn = document.getElementById("closePopupBtn");
 
+
   const gameState = {
     ronda: 1,
-    maxRondas: 5,
+    maxRondas: 10,
     scoreJugador: 0,
     scoreCpu: 0,
     playerCard: null,
@@ -206,13 +207,13 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="stat-ataque">${gameState.machineCard.ataque}</div>
         <div class="stat-defensa">${gameState.machineCard.defensa}</div>`;
 
-    ronda.textContent = gameState.ronda;
     puntuacionJugador.textContent = gameState.scoreJugador;
     puntuacionCpu.textContent = gameState.scoreCpu;
   }
 
   function jugarRonda(accionJugador) {
     let jugadorValor;
+    ronda.textContent = gameState.ronda;
 
     if (accionJugador === "ataque") {
       jugadorValor = gameState.playerCard.ataque;
@@ -236,9 +237,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (jugadorValor > cpuValor) {
       ganador = "Jugador";
       gameState.scoreJugador++;
+      puntuacionJugador.textContent = gameState.scoreJugador;
     } else if (cpuValor > jugadorValor) {
       ganador = "CPU";
       gameState.scoreCpu++;
+      puntuacionCpu.textContent = gameState.scoreCpu;
     } else {
       ganador = "Empate";
     }
@@ -246,12 +249,16 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.querySelector("h2").textContent = `Ronda: ${gameState.ronda}`;
     popup.querySelector(
       "p"
-    ).textContent = `Ganador de la ronda: ${ganador} (El rival usó ${accionCpu})`;
+    ).innerHTML = `Ganador de la ronda: ${ganador}<br> (El rival usó ${accionCpu})<br><br>
+    Carta Jugador: ${jugadorValor} -  Carta CPU: ${cpuValor}`;
     popup.classList.add("active");
 
+    
     gameState.ronda++;
-    ronda.textContent = gameState.ronda;
 
+    if (gameState.ronda < gameState.maxRondas)
+      ronda.textContent = gameState.ronda;
+    
     if (gameState.ronda <= gameState.maxRondas) {
       elegirCartas();
     }
@@ -260,7 +267,10 @@ document.addEventListener("DOMContentLoaded", () => {
       popup.querySelector("h2").textContent = "Fin del juego";
       popup.querySelector(
         "p"
-      ).textContent = `Jugador: ${gameState.scoreJugador} | Cpu: ${gameState.scoreCpu}`;
+      ).innerHTML = `Ganador de la ronda: ${ganador}<br> (El rival usó ${accionCpu})<br><br>
+    Carta Jugador: ${jugadorValor} - Carta CPU: ${cpuValor}<hr>
+    <strong>PUNTUACIÓN FINAL<strong><br>
+    Jugador: ${gameState.scoreJugador} - Cpu: ${gameState.scoreCpu}`;
 
       const result =
         gameState.scoreJugador > gameState.scoreCpu ? "win" : "lose";
@@ -284,6 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function reiniciarJuego() {
     gameState.ronda = 1;
+    ronda.textContent = gameState.ronda;
     gameState.scoreJugador = 0;
     gameState.scoreCpu = 0;
     gameState.historial = [];
